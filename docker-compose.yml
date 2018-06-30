@@ -1,0 +1,10 @@
+version: "3"
+services:
+  web:
+    build: .
+    command: npm start
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - PROTEUS_BOT_TOKEN
