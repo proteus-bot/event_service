@@ -1,0 +1,24 @@
+sudo: required
+
+services:
+- docker
+
+env:
+  global:
+  - REGISTRY_USER=proteusrobot
+  - secure: vn5PLsxrjICllpfhu8UiFIoBGPKchQU5D4Xdme2f3TQKVTK/dGCT67nt2T411USdoczUt7pLakPDloMR2ILeSQ6hetglVxlEejR4Gjrx/xlFnva8HbBuN/ZFHj72IES0rdsRgJhuFYIhU6gZ7EIoQ32gF4xZ2MpP07rwkM/rurhLVFPrx90mlh5LpEVDEJHn5kaxIX3YH785FhSKuPLpHBn7118EMmTOswDWTsB8VfV9Sl8Xd+RGjREYG4GQ1w1oGh1yY3zhMFm6MHj6wak2zsUTuA02AU6LZwKgwuK72UXvLwnVbpngqeqYXinjNRwAn/VkWcn8+mo/R9ovrRpoCw+ESs2uCj1yeBcN38oQ/MUummZKzgzsOYFfFf3yoJcCtBtA7f3DEO4onXzEbfPRn93h0ya9zRN1Fgaj/865ZLHAV3u1KncbNlDA5RFwAq2MUqEGk5JA2Whdf+PhrujnP1goJgjY0e7DiO1lHJuFW1lNXKXOWSt4eMjhll2lrnxmTS33D1O/DLA90lGTT0v/Xh5bAA4UZUgez6/mrwwr8DLjnXkqeeH3WpUKCMJwoVECN0NmLt9qsZkIJKJby8GeMvB5p4/GMQCy9B5Xfaply3dXuWyd8rgaLeaRLC1uPZPzP4NFOmaNlaKBNqYReW6vux5Xi/Yk+f6tZ+A15ObWL7w=
+
+script:
+- docker-compose up
+
+after-script:
+- docker images
+
+before_deploy:
+- docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
+
+deploy:
+  provider: script
+  script: docker push proteusbot/event_service
+  on:
+    branch: master
