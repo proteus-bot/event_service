@@ -8,3 +8,4 @@ services:
       - /app/node_modules
     environment:
       - PROTEUS_BOT_TOKEN
+    image: proteusbot/event_service
