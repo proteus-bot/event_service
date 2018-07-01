@@ -1,3 +1,4 @@
+const util = require('util');
 const Discord = require('discord.js');
 const PubSub = require('@google-cloud/pubsub');
 
@@ -11,8 +12,8 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
-client.on('message', msg => {
-  const data = JSON.stringify({ message: msg.content });
+client.on('message', message => {
+  const data = JSON.stringify({ message: util.inspect(message) });
   const dataBuffer = Buffer.from(data);
 
   pubsub
