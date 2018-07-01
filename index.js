@@ -1,4 +1,10 @@
 const Discord = require('discord.js');
+const PubSub = require('@google-cloud/pubsub');
+
+const topicDiscordOnMessage = process.env.PROTEUS_TOPIC_DISCORD_ON_MESSAGE;
+
+const pubsub = new PubSub();
+
 const client = new Discord.Client();
 
 client.on('ready', () => {
@@ -6,11 +12,22 @@ client.on('ready', () => {
 });
 
 client.on('message', msg => {
-  if (msg.content === 'ping') {
-    msg.reply('Pong!');
-  }
+  const data = JSON.stringify({ message: msg.content });
+  const dataBuffer = Buffer.from(data);
+
+  pubsub
+    .topic(topicDiscordOnMessage)
+    .publisher()
+    .publish(dataBuffer)
+    .then(messageId => {
+      console.log(`Message ${messageId} published.`);
+    })
+    .catch(err => {
+      console.error(err);
+    })
 });
 
-client.login(process.env.PROTEUS_BOT_TOKEN).catch(e => {
-    console.log(e.stack);
+client.login(process.env.PROTEUS_BOT_TOKEN)
+  .catch(err => {
+    console.error(err);
 });

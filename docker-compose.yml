@@ -1,6 +1,6 @@
 version: "3"
 services:
-  web:
+  app:
     build: .
     command: npm start
     volumes:
@@ -8,4 +8,6 @@ services:
       - /app/node_modules
     environment:
       - PROTEUS_BOT_TOKEN
+      - PROTEUS_PROJECT_ID
+      - PROTEUS_TOPIC_DISCORD_ON_MESSAGE
     image: proteusbot/event_service
