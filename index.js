@@ -13,7 +13,14 @@ client.on('ready', () => {
 });
 
 client.on('message', message => {
-  const data = JSON.stringify({ message: util.inspect(message) });
+  const data = JSON.stringify({
+    id: message.id,
+    author: message.author.id,
+    channel: message.channel.id,
+    channelType: typeof message.channel,
+    content: message.content,
+    cleanContent: message.cleanContent,
+  });
   const dataBuffer = Buffer.from(data);
 
   pubsub
@@ -21,7 +28,7 @@ client.on('message', message => {
     .publisher()
     .publish(dataBuffer)
     .then(messageId => {
-      console.log(`Message ${messageId} published.`);
+      console.log(`Message ${messageId} published. Message details: ${data}`);
     })
     .catch(err => {
       console.error(err);
